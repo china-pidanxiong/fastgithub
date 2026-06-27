@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Hosts Updater",
+  "version": "1.0.0",
+  "description": "Quickly refresh GitHub hosts configuration with one click. Requires the local GitHub Hosts Server running.",
+  "default_locale": "en",
+  "permissions": [
+    "activeTab"
+  ],
+  "host_permissions": [
+    "http://localhost:17890/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "GitHub Hosts Updater",
+    "default_icon": {
+      "16": "icons/icon16.svg",
+      "32": "icons/icon32.svg",
+      "48": "icons/icon48.svg",
+      "128": "icons/icon128.svg"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.svg",
+    "32": "icons/icon32.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  }
+}

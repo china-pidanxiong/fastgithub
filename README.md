@@ -1,0 +1,2 @@
+# fastgithub
+github加速

@@ -1,0 +1,41 @@
+<UserControl x:Class="FastGithub.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="White" BorderBrush="#d0d7de" BorderThickness="1"
+                CornerRadius="6" Padding="12" Margin="0,0,0,8">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="状态：" Foreground="#656d76" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusColor}"
+                           FontWeight="SemiBold" VerticalAlignment="Center" Margin="6,0,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <StackPanel Grid.Row="1" Margin="0,0,0,8"
+                    Visibility="{Binding IsRefreshing, Converter={StaticResource BoolToVis}}">
+            <ProgressBar Value="{Binding Progress}" Maximum="100" Height="16"/>
+            <TextBlock Text="{Binding ProgressText}" FontSize="11" Foreground="#656d76" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <Border Grid.Row="2" Background="White" BorderBrush="#d0d7de" BorderThickness="1" CornerRadius="6">
+            <DataGrid ItemsSource="{Binding HostsEntries}" AutoGenerateColumns="False"
+                      IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                      BorderThickness="0" Background="White" RowBackground="White"
+                      AlternatingRowBackground="#f6f8fa">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="域名" Binding="{Binding Domain}" Width="*"/>
+                    <DataGridTextColumn Header="IP" Binding="{Binding Ip, TargetNullValue=—}" Width="140"/>
+                    <DataGridTextColumn Header="状态" Binding="{Binding Status}" Width="90"/>
+                    <DataGridTextColumn Header="延迟" Binding="{Binding LatencyMs, StringFormat={}{0}ms, TargetNullValue=—}" Width="80"/>
+                    <DataGridTextColumn Header="上次更新" Binding="{Binding LastUpdate, StringFormat=HH:mm:ss, TargetNullValue=—}" Width="90"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -31,5 +31,7 @@
         "8.8.8.8",
         "1.1.1.1"
     ],
-    "HostsPath": "C:\\Windows\\System32\\drivers\\etc\\hosts"
+    "HostsPath": "C:\\Windows\\System32\\drivers\\etc\\hosts",
+    "MaxBackupCount": 10,
+    "TimeoutMs": 3000
 }

@@ -1,0 +1,67 @@
+# ==========================================================
+# FastGithub .gitignore
+# ==========================================================
+
+# ----- .NET 构建产物 -----
+**/bin/
+**/obj/
+**/artifacts/
+**/publish/
+
+# ----- 本地安装的 .NET SDK（项目内 .dotnet 目录）-----
+.dotnet/
+
+# ----- 沙箱环境 workaround：重定向的 APPDATA/LOCALAPPDATA -----
+.appdata/
+
+# ----- NuGet 包缓存（项目级）-----
+.nuget/
+
+# ----- NuGet 迁移缓存（机器生成）-----
+NuGet/
+**/NuGet/Migrations/
+
+# ----- Visual Studio / Rider / VS Code -----
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+.vscode/
+
+# ----- 测试结果与覆盖率 -----
+TestResults/
+*.coverage
+*.coveragexml
+coverage*.xml
+coverage*.json
+
+# ----- 发布产物 -----
+*.exe
+*.dll
+*.pdb
+*.pubxml.user
+
+# ----- 日志与临时文件 -----
+*.log
+*.tmp
+*.bak
+*.cache
+
+# ----- Superpowers 框架（本地工具链与协作过程产物，不提交）-----
+.superpowers/
+docs/superpowers/
+
+# ----- 测试项目（本地测试代码，不提交）-----
+tests/
+
+# ----- 操作系统文件 -----
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# ----- 配置文件（本地用户覆盖，不提交）-----
+**/config.json
+!**/config.example.json

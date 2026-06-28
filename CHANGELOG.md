@@ -1,5 +1,25 @@
 # 变更记录
 
+## [2.0.2] - 2026-06-27
+
+### 新增
+
+- 新增 `FastGithub.Launcher` 项目（.NET Framework 4.8）：自动检测 .NET 9 Desktop Runtime，未装时弹窗引导下载静默安装
+- Launcher 启动即 UAC 提权，全程一次弹窗覆盖安装 + 主程序启动
+- 新增 `ProgressForm` 进度窗口：无边框、可最小化、无关闭按钮，避免用户误中断
+- 主程序 `app.manifest` 要求 UAC 提权（写 hosts 需要）
+
+### 变更
+
+- 主程序从自包含单文件（162 MB）改为 FrameworkDependent 单文件（~0.2 MB）
+- 主程序 `AssemblyName` 改为 `FastGithub.App`，由 Launcher 启动
+- `publish.ps1` 改为构建双 exe 并收集到 `publish/` 目录
+- Runtime 版本固定 9.0.17（2026-06-09 发布的累积更新）
+
+### 移除
+
+- 移除主程序 `SelfContained=true`，改为 `SelfContained=false`
+
 ## [2.0.1] - 2026-06-27
 
 ### 文档与代码风格整理

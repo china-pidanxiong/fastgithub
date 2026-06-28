@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Threading;
 
 namespace FastGithub.Launcher;
 
@@ -52,9 +53,28 @@ public sealed class RuntimeInstaller : IDisposable
         var tempPath = GetTempInstallerPath();
         CleanStaleTempFile(tempPath);
 
+        var done = new ManualResetEventSlim(false);
+        Exception downloadError = null;
+
         _client.DownloadProgressChanged += (s, e) =>
             DownloadProgressChanged?.Invoke(e.ProgressPercentage);
-        _client.DownloadFile(DownloadUrl, tempPath);
+        _client.DownloadFileCompleted += (s, e) =>
+        {
+            downloadError = e.Error;
+            done.Set();
+        };
+
+        try
+        {
+            _client.DownloadFileAsync(new Uri(DownloadUrl), tempPath);
+            done.Wait();
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        if (downloadError != null) return false;
 
         InstallStarted?.Invoke();
 

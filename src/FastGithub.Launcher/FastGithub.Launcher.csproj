@@ -16,4 +16,8 @@
     <ApplicationManifest Include="app.manifest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="FastGithub.Launcher.Tests" />
+  </ItemGroup>
+
 </Project>

@@ -59,18 +59,15 @@
 
             <Border Grid.Column="0" Background="{StaticResource BgBrush}"
                     BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0">
-                <StackPanel Margin="0,8">
-                    <ListBoxItem Content="📊  仪表盘"
-                                 Style="{StaticResource SidebarNavItem}"
-                                 IsSelected="True"
-                                 PreviewMouseLeftButtonUp="Dashboard_Click"/>
-                    <ListBoxItem Content="⚙️  配置"
-                                 Style="{StaticResource SidebarNavItem}"
-                                 PreviewMouseLeftButtonUp="Config_Click"/>
-                    <ListBoxItem Content="📝  日志"
-                                 Style="{StaticResource SidebarNavItem}"
-                                 PreviewMouseLeftButtonUp="Log_Click"/>
-                </StackPanel>
+                <ListBox x:Name="NavListBox" Margin="0,8"
+                         SelectedIndex="0"
+                         SelectionChanged="NavListBox_SelectionChanged"
+                         Background="Transparent"
+                         BorderThickness="0">
+                    <ListBoxItem Content="📊  仪表盘" Style="{StaticResource SidebarNavItem}"/>
+                    <ListBoxItem Content="⚙️  配置" Style="{StaticResource SidebarNavItem}"/>
+                    <ListBoxItem Content="📝  日志" Style="{StaticResource SidebarNavItem}"/>
+                </ListBox>
             </Border>
 
             <ContentControl Grid.Column="1" x:Name="ContentArea">

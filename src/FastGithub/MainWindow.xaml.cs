@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using FastGithub.Services;
 using FastGithub.ViewModels;
 
@@ -17,22 +16,16 @@ public partial class MainWindow : Window
 
     public void SetTrayService(TrayService trayService) => _trayService = trayService;
 
-    private void Dashboard_Click(object sender, MouseButtonEventArgs e)
+    private void NavListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (DataContext is MainWindowViewModel vm)
-            ContentArea.Content = new Views.DashboardView { DataContext = vm.Dashboard };
-    }
-
-    private void Config_Click(object sender, MouseButtonEventArgs e)
-    {
-        if (DataContext is MainWindowViewModel vm)
-            ContentArea.Content = new Views.ConfigView { DataContext = vm.Config };
-    }
-
-    private void Log_Click(object sender, MouseButtonEventArgs e)
-    {
-        if (DataContext is MainWindowViewModel vm)
-            ContentArea.Content = new Views.LogView { DataContext = vm.Log };
+        if (DataContext is not MainWindowViewModel vm) return;
+        ContentArea.Content = NavListBox.SelectedIndex switch
+        {
+            0 => new Views.DashboardView { DataContext = vm.Dashboard },
+            1 => new Views.ConfigView { DataContext = vm.Config },
+            2 => new Views.LogView { DataContext = vm.Log },
+            _ => ContentArea.Content
+        };
     }
 
     private void Window_Closing(object sender, CancelEventArgs e)

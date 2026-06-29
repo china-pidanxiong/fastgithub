@@ -4,37 +4,78 @@
         xmlns:views="clr-namespace:FastGithub.Views"
         Title="GitHub Hosts 加速器" Height="560" Width="760"
         MinWidth="640" MinHeight="480"
-        Background="#f6f8fa"
+        Background="{StaticResource BgBrush}"
+        Foreground="{StaticResource TextPrimaryBrush}"
+        FontFamily="Segoe UI"
+        FontSize="13"
         WindowStartupLocation="CenterScreen"
+        Icon="Assets/AppIcon.ico"
         Closing="Window_Closing">
     <DockPanel>
-        <Grid DockPanel.Dock="Top" Background="#24292f">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,8">
-                <TextBlock Text="GitHub Hosts 加速器" Foreground="White" FontSize="14" FontWeight="SemiBold"/>
-            </StackPanel>
-            <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="0,0,12,0"
-                       Text="{Binding Dashboard.StatusText}" Foreground="White" FontSize="12"/>
-            <Button Grid.Column="2" Margin="0,6,12,6" Padding="12,4"
-                    Style="{StaticResource PrimaryButton}"
-                    Command="{Binding Dashboard.RefreshCommand}"
-                    Content="🔄 立即刷新"/>
-        </Grid>
+        <Border DockPanel.Dock="Top" Background="{StaticResource HeaderBgBrush}"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+            <Grid Height="48" Margin="16,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="28" Height="28" CornerRadius="6">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#24292f" Offset="0"/>
+                                <GradientStop Color="#2da44e" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Path Data="{StaticResource OctoCatGeometry}" Fill="White"
+                              Width="16" Height="16" HorizontalAlignment="Center"
+                              VerticalAlignment="Center" Stretch="Uniform"/>
+                    </Border>
+                    <TextBlock Text="GitHub Hosts 加速器"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               FontSize="14" FontWeight="SemiBold"
+                               VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBlock Text="v2.0"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               FontSize="12"
+                               VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </StackPanel>
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="0,0,16,0"
+                           Text="{Binding Dashboard.StatusText}"
+                           Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                <Button Grid.Column="2"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding Dashboard.RefreshCommand}"
+                        Content="🔄 立即刷新"/>
+            </Grid>
+        </Border>
 
-        <TabControl Background="White" Margin="0">
-            <TabItem Header="仪表盘">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="{StaticResource BgBrush}"
+                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0">
+                <StackPanel Margin="0,8">
+                    <ListBoxItem Content="📊  仪表盘"
+                                 Style="{StaticResource SidebarNavItem}"
+                                 IsSelected="True"
+                                 PreviewMouseLeftButtonUp="Dashboard_Click"/>
+                    <ListBoxItem Content="⚙️  配置"
+                                 Style="{StaticResource SidebarNavItem}"
+                                 PreviewMouseLeftButtonUp="Config_Click"/>
+                    <ListBoxItem Content="📝  日志"
+                                 Style="{StaticResource SidebarNavItem}"
+                                 PreviewMouseLeftButtonUp="Log_Click"/>
+                </StackPanel>
+            </Border>
+
+            <ContentControl Grid.Column="1" x:Name="ContentArea">
                 <views:DashboardView DataContext="{Binding Dashboard}"/>
-            </TabItem>
-            <TabItem Header="配置">
-                <views:ConfigView DataContext="{Binding Config}"/>
-            </TabItem>
-            <TabItem Header="日志">
-                <views:LogView DataContext="{Binding Log}"/>
-            </TabItem>
-        </TabControl>
+            </ContentControl>
+        </Grid>
     </DockPanel>
 </Window>

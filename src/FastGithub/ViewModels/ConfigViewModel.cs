@@ -22,6 +22,12 @@ public class ConfigViewModel : ViewModelBase
     private int _timeoutMs = 3000;
     public int TimeoutMs { get => _timeoutMs; set => SetProperty(ref _timeoutMs, value); }
 
+    private bool _closeToTray = true;
+    public bool CloseToTray { get => _closeToTray; set => SetProperty(ref _closeToTray, value); }
+
+    private bool _rememberCloseChoice;
+    public bool RememberCloseChoice { get => _rememberCloseChoice; set => SetProperty(ref _rememberCloseChoice, value); }
+
     private string? _selectedDomain;
     public string? SelectedDomain { get => _selectedDomain; set => SetProperty(ref _selectedDomain, value); }
 
@@ -60,6 +66,8 @@ public class ConfigViewModel : ViewModelBase
         HostsPath = config.HostsPath;
         MaxBackupCount = config.MaxBackupCount;
         TimeoutMs = config.TimeoutMs;
+        CloseToTray = config.CloseToTray;
+        RememberCloseChoice = config.RememberCloseChoice;
     }
 
     /// <summary>
@@ -73,7 +81,9 @@ public class ConfigViewModel : ViewModelBase
             DnsServers = DnsServers.ToList(),
             HostsPath = HostsPath,
             MaxBackupCount = MaxBackupCount,
-            TimeoutMs = TimeoutMs
+            TimeoutMs = TimeoutMs,
+            CloseToTray = CloseToTray,
+            RememberCloseChoice = RememberCloseChoice
         };
         _configService.Save(config);
         _onSaved?.Invoke(config);

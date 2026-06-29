@@ -9,6 +9,8 @@ public class AppConfig
     public string HostsPath { get; set; } = string.Empty;
     public int MaxBackupCount { get; set; } = 10;
     public int TimeoutMs { get; set; } = 3000;
+    public bool CloseToTray { get; set; } = true;
+    public bool RememberCloseChoice { get; set; } = false;
 
     public static AppConfig CreateDefault() => new()
     {
@@ -33,6 +35,8 @@ public class AppConfig
             Environment.GetFolderPath(Environment.SpecialFolder.Windows),
             "System32", "drivers", "etc", "hosts"),
         MaxBackupCount = 10,
-        TimeoutMs = 3000
+        TimeoutMs = 3000,
+        CloseToTray = true,
+        RememberCloseChoice = false
     };
 }

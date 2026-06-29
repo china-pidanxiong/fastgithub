@@ -1,8 +1,8 @@
 <UserControl x:Class="FastGithub.Views.ConfigView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="16">
-        <StackPanel>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <StackPanel Margin="16">
             <Border Style="{StaticResource CardBorder}" Margin="0,0,0,12">
                 <StackPanel>
                     <TextBlock Text="🌐 域名列表" FontSize="14" FontWeight="SemiBold"
@@ -67,6 +67,23 @@
                             <TextBox Text="{Binding MaxBackupCount}"/>
                         </StackPanel>
                     </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="🪟 界面行为" FontSize="14" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+                    <StackPanel>
+                        <CheckBox Content="关闭窗口时最小化到托盘（后台运行）"
+                                  IsChecked="{Binding CloseToTray}"
+                                  Foreground="{StaticResource TextPrimaryBrush}"
+                                  FontSize="13" Margin="0,0,0,8"/>
+                        <CheckBox Content="记住关闭选择，不再询问"
+                                  IsChecked="{Binding RememberCloseChoice}"
+                                  Foreground="{StaticResource TextPrimaryBrush}"
+                                  FontSize="13"/>
+                    </StackPanel>
                 </StackPanel>
             </Border>
 

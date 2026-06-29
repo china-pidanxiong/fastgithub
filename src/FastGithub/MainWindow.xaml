@@ -36,7 +36,7 @@
                                Foreground="{StaticResource TextPrimaryBrush}"
                                FontSize="14" FontWeight="SemiBold"
                                VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <TextBlock Text="v2.0"
+                    <TextBlock Text="v2.1"
                                Foreground="{StaticResource TextSecondaryBrush}"
                                FontSize="12"
                                VerticalAlignment="Center" Margin="8,0,0,0"/>
@@ -63,7 +63,10 @@
                          SelectedIndex="0"
                          SelectionChanged="NavListBox_SelectionChanged"
                          Background="Transparent"
-                         BorderThickness="0">
+                         BorderThickness="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                         PreviewMouseWheel="NavListBox_PreviewMouseWheel">
                     <ListBoxItem Content="📊  仪表盘" Style="{StaticResource SidebarNavItem}"/>
                     <ListBoxItem Content="⚙️  配置" Style="{StaticResource SidebarNavItem}"/>
                     <ListBoxItem Content="📝  日志" Style="{StaticResource SidebarNavItem}"/>

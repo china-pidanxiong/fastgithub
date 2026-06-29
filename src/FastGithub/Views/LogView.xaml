@@ -1,21 +1,73 @@
 <UserControl x:Class="FastGithub.Views.LogView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Margin="12">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
-            <Button Content="打开日志文件" Padding="8,4" Click="OpenLog_Click"/>
-            <Button Content="清空" Padding="8,4" Margin="8,0,0,0" Click="Clear_Click"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12">
+            <Button Content="📂 打开日志文件" Style="{StaticResource SecondaryButton}"
+                    Click="OpenLog_Click" Padding="12,6"/>
+            <Button Content="🗑 清空" Style="{StaticResource SecondaryButton}"
+                    Click="Clear_Click" Padding="12,6" Margin="8,0,0,0"/>
         </StackPanel>
-        <ListBox Grid.Row="1" ItemsSource="{Binding Logs}" FontFamily="Consolas" FontSize="11">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding .}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Padding="0">
+            <ListBox ItemsSource="{Binding Logs}"
+                     FontFamily="Consolas" FontSize="12"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Timestamp, StringFormat=[HH:mm:ss] }"
+                                       Foreground="#7d8590"/>
+                            <TextBlock Text=" " />
+                            <TextBlock Text="[" />
+                            <TextBlock Text="{Binding Level}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#7d8590" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Level}" Value="Info">
+                                                <Setter Property="Foreground" Value="#58a6ff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Level}" Value="Success">
+                                                <Setter Property="Foreground" Value="#3fb950" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Level}" Value="Warn">
+                                                <Setter Property="Foreground" Value="#d29922" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Level}" Value="Error">
+                                                <Setter Property="Foreground" Value="#f85149" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock Text="] " />
+                            <TextBlock Text="{Binding Message}"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       TextWrapping="NoWrap"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="12,4" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Border>
     </Grid>
 </UserControl>

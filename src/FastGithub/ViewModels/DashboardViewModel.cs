@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using FastGithub.Core;
 using FastGithub.Models;
@@ -31,6 +32,18 @@ public class DashboardViewModel : ViewModelBase
 
     private bool _isRefreshing;
     public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
+
+    private int _totalCount;
+    public int TotalCount { get => _totalCount; set => SetProperty(ref _totalCount, value); }
+
+    private int _successCount;
+    public int SuccessCount { get => _successCount; set => SetProperty(ref _successCount, value); }
+
+    private int _timeoutCount;
+    public int TimeoutCount { get => _timeoutCount; set => SetProperty(ref _timeoutCount, value); }
+
+    private long _avgLatency;
+    public long AvgLatency { get => _avgLatency; set => SetProperty(ref _avgLatency, value); }
 
     public ICommand RefreshCommand { get; }
 
@@ -123,6 +136,16 @@ public class DashboardViewModel : ViewModelBase
                 entry.LatencyMs = lat;
             HostsEntries.Add(entry);
         }
+        UpdateStats();
+    }
+
+    private void UpdateStats()
+    {
+        TotalCount = HostsEntries.Count;
+        SuccessCount = HostsEntries.Count(e => e.Status == "已配置" && e.LatencyMs.HasValue);
+        TimeoutCount = HostsEntries.Count(e => e.Status == "超时" || (e.Status == "已配置" && !e.LatencyMs.HasValue));
+        var latencies = HostsEntries.Where(e => e.LatencyMs.HasValue).Select(e => e.LatencyMs!.Value).ToList();
+        AvgLatency = latencies.Count > 0 ? (long)latencies.Average() : 0;
     }
 
     public void Initialize() => LoadEntriesFromHosts(null);

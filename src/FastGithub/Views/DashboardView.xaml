@@ -1,41 +1,92 @@
 <UserControl x:Class="FastGithub.Views.DashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Margin="12">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="16">
+        <StackPanel>
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="运行概览" FontSize="14" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding TotalCount}" FontSize="24" FontWeight="Bold"
+                                       Foreground="{StaticResource AccentBrush}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="域名总数" FontSize="11"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding SuccessCount}" FontSize="24" FontWeight="Bold"
+                                       Foreground="{StaticResource SuccessBrush}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="正常" FontSize="11"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding TimeoutCount}" FontSize="24" FontWeight="Bold"
+                                       Foreground="{StaticResource WarningBrush}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="超时" FontSize="11"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding AvgLatency}" FontSize="24" FontWeight="Bold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"/>
+                                <TextBlock Text="ms" FontSize="14"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           VerticalAlignment="Bottom" Margin="2,0,0,4"/>
+                            </StackPanel>
+                            <TextBlock Text="平均延迟" FontSize="11"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
 
-        <Border Grid.Row="0" Background="White" BorderBrush="#d0d7de" BorderThickness="1"
-                CornerRadius="6" Padding="12" Margin="0,0,0,8">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="状态：" Foreground="#656d76" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusColor}"
-                           FontWeight="SemiBold" VerticalAlignment="Center" Margin="6,0,0,0"/>
+            <StackPanel Margin="0,0,0,12"
+                        Visibility="{Binding IsRefreshing, Converter={StaticResource BoolToVis}}">
+                <ProgressBar Value="{Binding Progress}" Maximum="100" Height="16"
+                             Foreground="{StaticResource PrimaryBrush}"
+                             Background="{StaticResource InputBgBrush}"
+                             BorderBrush="{StaticResource BorderBrush}"
+                             BorderThickness="1"/>
+                <TextBlock Text="{Binding ProgressText}" FontSize="11"
+                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,6,0,0"/>
             </StackPanel>
-        </Border>
 
-        <StackPanel Grid.Row="1" Margin="0,0,0,8"
-                    Visibility="{Binding IsRefreshing, Converter={StaticResource BoolToVis}}">
-            <ProgressBar Value="{Binding Progress}" Maximum="100" Height="16"/>
-            <TextBlock Text="{Binding ProgressText}" FontSize="11" Foreground="#656d76" Margin="0,4,0,0"/>
+            <Border Style="{StaticResource CardBorder}" Padding="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Padding="16,12"
+                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+                        <TextBlock Text="域名列表" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                    </Border>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding HostsEntries}"
+                              AutoGenerateColumns="False" IsReadOnly="True"
+                              HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                              BorderThickness="0" Background="Transparent">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="域名" Binding="{Binding Domain}" Width="*"/>
+                            <DataGridTextColumn Header="IP" Binding="{Binding Ip, TargetNullValue=—}" Width="140"/>
+                            <DataGridTextColumn Header="状态" Binding="{Binding Status}" Width="80"/>
+                            <DataGridTextColumn Header="延迟" Binding="{Binding LatencyMs, StringFormat={}{0}ms, TargetNullValue=—}" Width="70"/>
+                            <DataGridTextColumn Header="上次更新" Binding="{Binding LastUpdate, StringFormat=HH:mm:ss, TargetNullValue=—}" Width="90"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
         </StackPanel>
-
-        <Border Grid.Row="2" Background="White" BorderBrush="#d0d7de" BorderThickness="1" CornerRadius="6">
-            <DataGrid ItemsSource="{Binding HostsEntries}" AutoGenerateColumns="False"
-                      IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="Horizontal"
-                      BorderThickness="0" Background="White" RowBackground="White"
-                      AlternatingRowBackground="#f6f8fa">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="域名" Binding="{Binding Domain}" Width="*"/>
-                    <DataGridTextColumn Header="IP" Binding="{Binding Ip, TargetNullValue=—}" Width="140"/>
-                    <DataGridTextColumn Header="状态" Binding="{Binding Status}" Width="90"/>
-                    <DataGridTextColumn Header="延迟" Binding="{Binding LatencyMs, StringFormat={}{0}ms, TargetNullValue=—}" Width="80"/>
-                    <DataGridTextColumn Header="上次更新" Binding="{Binding LastUpdate, StringFormat=HH:mm:ss, TargetNullValue=—}" Width="90"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Border>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

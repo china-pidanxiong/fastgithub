@@ -1,10 +1,12 @@
 using System;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace FastGithub.Launcher;
 
 /// <summary>
-/// 下载/安装阶段的进度窗口。无边框、可最小化、无关闭按钮，避免用户误中断流程。
+/// 下载/安装阶段的进度窗口。暗色主题，可最小化，无关闭按钮，避免用户误中断流程。
 /// </summary>
 public partial class ProgressForm : Form
 {
@@ -16,37 +18,65 @@ public partial class ProgressForm : Form
     /// </summary>
     public ProgressForm()
     {
+        BackColor = Color.FromArgb(0x0d, 0x11, 0x17);
+        ForeColor = Color.FromArgb(0xe6, 0xed, 0xf3);
         FormBorderStyle = FormBorderStyle.FixedToolWindow;
         MinimizeBox = true;
         MaximizeBox = false;
         ControlBox = false;
-        Width = 400;
-        Height = 120;
+        Width = 440;
+        Height = 140;
         StartPosition = FormStartPosition.CenterScreen;
         Text = "正在准备运行环境";
+        Font = new Font("Segoe UI", 9f);
+
+        try
+        {
+            var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico");
+            if (File.Exists(iconPath))
+                Icon = new Icon(iconPath);
+        }
+        catch { }
 
         _statusLabel = new Label
         {
-            Width = 360,
-            Height = 20,
-            Top = 20,
+            Width = 400,
+            Height = 24,
+            Top = 24,
             Left = 20,
+            ForeColor = Color.FromArgb(0xe6, 0xed, 0xf3),
+            BackColor = Color.FromArgb(0x0d, 0x11, 0x17),
+            Font = new Font("Segoe UI", 10f),
             Text = "正在下载 .NET 9 Runtime..."
         };
 
         _progressBar = new ProgressBar
         {
-            Width = 360,
-            Height = 20,
-            Top = 50,
+            Width = 400,
+            Height = 24,
+            Top = 60,
             Left = 20,
             Minimum = 0,
             Maximum = 100,
-            Value = 0
+            Value = 0,
+            Style = ProgressBarStyle.Continuous
+        };
+
+        var hintLabel = new Label
+        {
+            Width = 400,
+            Height = 20,
+            Top = 92,
+            Left = 20,
+            ForeColor = Color.FromArgb(0x7d, 0x85, 0x90),
+            BackColor = Color.FromArgb(0x0d, 0x11, 0x17),
+            Font = new Font("Segoe UI", 8.5f),
+            Text = "安装完成后将自动启动 GitHub Hosts 加速器"
         };
 
         Controls.Add(_statusLabel);
         Controls.Add(_progressBar);
+        Controls.Add(hintLabel);
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using Application = System.Windows.Application;
 
@@ -56,6 +57,23 @@ public class TrayService : IDisposable
 
     private static Icon CreateIcon()
     {
+        try
+        {
+            var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico");
+            if (File.Exists(iconPath))
+                return new Icon(iconPath);
+        }
+        catch { }
+
+        try
+        {
+            using var stream = Application.GetResourceStream(
+                new Uri("pack://application:,,,/Assets/AppIcon.ico", UriKind.Absolute))?.Stream;
+            if (stream != null)
+                return new Icon(stream);
+        }
+        catch { }
+
         using var bmp = new Bitmap(32, 32);
         using var g = Graphics.FromImage(bmp);
         using var pen = new Pen(Color.White, 2);

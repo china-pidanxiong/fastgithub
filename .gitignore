@@ -65,3 +65,11 @@ Desktop.ini
 # ----- 配置文件（本地用户覆盖，不提交）-----
 **/config.json
 !**/config.example.json
+
+# ----- 代码签名证书（私钥，不提交）-----
+*.pfx
+*.p12
+*.key
+*.cer
+scripts/*.pfx
+scripts/*.p12

@@ -8,7 +8,7 @@ GitHub hosts 加速 Windows 桌面工具。
 
 | 项 | 内容 |
 |---|---|
-| 版本 | 2.0.2（见 [CHANGELOG.md](CHANGELOG.md)） |
+| 版本 | 2.1.1（见 [CHANGELOG.md](CHANGELOG.md)） |
 | 源码 | [src/FastGithub/](src/FastGithub)（主程序）+ [src/FastGithub.Launcher/](src/FastGithub.Launcher)（引导器） |
 | 配置模板 | [src/FastGithub/config.example.json](src/FastGithub/config.example.json) |
 | 解决方案 | [FastGithub.sln](FastGithub.sln) |
@@ -111,10 +111,16 @@ dotnet build
 
 ## 发布双 exe
 
-使用发布脚本（沙箱 workaround + 收集交付物）：
+使用发布脚本（构建 + 收集交付物 + 可选代码签名）：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .superpowers/publish.ps1
+powershell -ExecutionPolicy Bypass -File scripts/publish.ps1
+```
+
+带代码签名发布（详见 [AGENTS.md](AGENTS.md) 的「代码签名」章节）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/publish.ps1 -Sign -CertPath .\scripts\FastGithub.pfx -CertPassword yourpassword
 ```
 
 产物路径：`publish/`
@@ -165,6 +171,21 @@ A: 有效。hosts 是 Windows 系统级配置，FastGithub 只负责写入，程
 
 **Q: 引导器下载 Runtime 失败怎么办？**
 A: 弹窗会附带下载链接，可手动下载安装。直链：`https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/9.0.17/windowsdesktop-runtime-9.0.17-win-x64.exe`。安装后再次双击引导器即可直接启动主程序。
+
+**Q: Windows 提示「智能应用控制已阻止此应用」？**
+A: 这是 Windows Smart App Control 安全功能，因为程序没有数字签名。解决方案：
+
+1. **自签名证书（自己用）**：生成自签名证书并安装到受信任根，然后用签名版本发布。详见 [AGENTS.md](AGENTS.md) 的「代码签名」章节。
+2. **手动允许**：在 Windows 安全中心 → 应用和浏览器控制 → 智能应用控制中找到并选择「仍要运行」。
+3. **正式证书（发布给他人）**：申请正式代码签名证书（如 Certum 开源免费证书、OV/EV 证书）。
+
+**Q: 为什么用了自签名证书，其他电脑运行还是提示不安全？**
+A: 自签名证书只在安装了该证书的电脑上受信任。发布给其他用户需要使用受信任的 CA（证书颁发机构）签发的正式代码签名证书。推荐开源项目申请 Certum Open Source 免费证书，或购买商业 OV/EV 证书。
+
+**Q: 时间戳服务连接失败怎么办？**
+A: 时间戳服务用于确保证书过期后签名仍然有效。如果连接失败，可以：
+- 更换时间戳服务器（如 `http://timestamp.digicert.com`、`http://timestamp.sectigo.com`）
+- 忽略时间戳（不推荐，证书过期后签名将失效）
 
 ## 项目结构
 
